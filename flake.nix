@@ -1,5 +1,5 @@
 {
-  description = "";
+  description = "home-manager module for leftwm ";
 
   outputs = inputs: {
     homeManagerModules = {
