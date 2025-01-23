@@ -28,6 +28,17 @@ in {
       description = "extra packages to be installed alongside leftwm";
     };
 
+    startupPrograms = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [
+        "picom"
+        "eww open bar"
+        "dunst"
+      ];
+      description = "programs or really lines appended to the end of the `up` script";
+    };
+
     theme = mkOption {
       type = let
         valueType = with types;
@@ -135,7 +146,11 @@ in {
         };
 
         "leftwm/themes/current/up" = mkIf (cfg.up != "") {
-          source = pkgs.writeShellScript "up" cfg.up;
+          source = let
+            startupPrograms = "\n# Startup Programs\n" + (lib.concatStringsSep "\n" cfg.startupPrograms);
+            contents = cfg.up + startupPrograms;
+          in
+            pkgs.writeShellScript "up" contents;
         };
 
         "leftwm/themes/current/down" = mkIf (cfg.down != "") {
