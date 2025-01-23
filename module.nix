@@ -121,6 +121,8 @@ in {
         (optional (cfg.package != null) cfg.package)
         ++ cfg.extraPackages;
 
+      xsession.windowManager.command = "${lib.getExe cfg.package}";
+
       xdg.configFile = {
         "leftwm/config.ron".text =
           ''
