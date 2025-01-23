@@ -21,6 +21,13 @@ in {
       example = pkgs.leftwm;
     };
 
+    extraPackages = mkOption {
+      type = types.listOf types.package;
+      default = [];
+      example = with pkgs; [eww];
+      description = "extra packages to be installed alongside leftwm";
+    };
+
     theme = mkOption {
       type = let
         valueType = with types;
@@ -110,7 +117,9 @@ in {
   in
     mkIf cfg.enable
     {
-      home.packages = optional (cfg.package != null) cfg.package;
+      home.packages =
+        (optional (cfg.package != null) cfg.package)
+        ++ cfg.extraPackages;
 
       xdg.configFile = {
         "leftwm/config.ron".text =
